@@ -80,6 +80,7 @@ defaults.maxLength = null;
 defaults.resolveJsonPath = false;
 defaults.reuseProperties = false;
 defaults.fillProperties = true;
+defaults.replaceEmptyByRandomValue = false;
 defaults.random = Math.random;
 /**
  * This class defines a registry for custom settings used within JSF.
@@ -1172,6 +1173,12 @@ function objectType(value, path, resolve, traverseCallback) {
       }
     }
 
+    if (additionalProperties === false) {
+      if (requiredProperties.indexOf(key) !== -1) {
+        props[key] = properties[key];
+      }
+    }
+
     if (properties[key]) {
       props[key] = properties[key];
     }
@@ -1510,7 +1517,9 @@ function traverse(schema, path, resolve, rootSchema) {
     }
 
     if (optionAPI('useDefaultValue') && 'default' in schema) {
-      return schema.default;
+      if (schema.default !== '' || !optionAPI('replaceEmptyByRandomValue')) {
+        return schema.default;
+      }
     }
 
     if ('template' in schema) {
