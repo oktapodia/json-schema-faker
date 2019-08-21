@@ -9754,6 +9754,12 @@
         }
       }
 
+      if (additionalProperties === false) {
+        if (requiredProperties.indexOf(key) !== -1) {
+          props[key] = properties[key];
+        }
+      }
+
       if (properties[key]) {
         props[key] = properties[key];
       }
@@ -10086,8 +10092,8 @@
     if (path[path.length - 1] !== 'properties') {
       // example values have highest precedence
       if (optionAPI('useExamplesValue') && Array.isArray(schema.examples)) {
-        // include `default` value as example too
-        var fixedExamples = schema.examples.concat('default' in schema ? [schema.default] : []);
+        // DON'T include `default` value as example too
+        var fixedExamples = schema.examples;
         return utils.typecast(null, schema, function () { return random.pick(fixedExamples); });
       }
 
