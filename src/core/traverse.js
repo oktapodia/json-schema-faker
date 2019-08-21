@@ -17,9 +17,8 @@ function traverse(schema, path, resolve, rootSchema) {
   if (path[path.length - 1] !== 'properties') {
     // example values have highest precedence
     if (optionAPI('useExamplesValue') && Array.isArray(schema.examples)) {
-      // include `default` value as example too
-      const fixedExamples = schema.examples
-        .concat('default' in schema ? [schema.default] : []);
+      // DON'T include `default` value as example too
+      const fixedExamples = schema.examples;
 
       return utils.typecast(null, schema, () => random.pick(fixedExamples));
     }
